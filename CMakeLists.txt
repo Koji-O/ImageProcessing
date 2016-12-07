@@ -1,0 +1,5 @@
+project(ch3)
+cmake_minimum_required(VERSION 2.8)
+find_package( OpenCV REQUIRED)
+set(CMAKE_CXX_COMPILER clang++)
+add_subdirectory(src)
