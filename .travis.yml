@@ -4,4 +4,5 @@ compiler:
     - gcc
 script:
     - cd build
+    - sh script.sh
     - cmake .. && make
