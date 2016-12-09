@@ -3,6 +3,6 @@ compiler:
     - clang
     - gcc
 script:
-    - cd build
     - sh script.sh
+    - cd build
     - cmake .. && make
