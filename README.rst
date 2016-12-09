@@ -1,3 +1,9 @@
+|Travis|_
+
+.. |Travis| image:: https://travis-ci.org/Koji-O/ImageProcessing.svg?branch=master
+.. _Travis: https://travis-ci.org/Koji-O/ImageProcessing
+
+
 C言語で学ぶ実践画像処理
 ===================================
 

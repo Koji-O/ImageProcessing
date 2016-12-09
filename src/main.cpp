@@ -1,5 +1,6 @@
 #include "image/Image.hpp"
 #include <iostream>
+#include <wx/wx.h>
 
 
 int main(int argc, char* argv[]){
