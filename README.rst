@@ -25,11 +25,12 @@ linux環境、mac環境ではビルドが実行できることを確認してい
 * Qt5に関して。
 
 ::
-  QTDIRを環境変数として設定する必要があります。
-  (例)/usr/local/lib/qt5の場合。
-  .bashrcに
-  export QTDIR=/usr/local/lib/qt5
-  を書き込む。
+   
+   QTDIRを環境変数として設定する必要があります。
+   (例)/usr/local/lib/qt5の場合。
+   .bashrcに
+   export QTDIR=/usr/local/lib/qt5
+   を書き込む。
 
   
 
