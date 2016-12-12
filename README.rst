@@ -20,8 +20,16 @@ C言語で学ぶ実践画像処理
 2. Cmake version >= 2.8
 3. Qt5
 
-
 linux環境、mac環境ではビルドが実行できることを確認しています。
+
+* Qt5
+  QTDIRを環境変数として設定する必要があります。
+  (例)/usr/local/lib/qt5の場合。
+  .bashrcに
+  export QTDIR=/usr/local/lib/qt5
+  を書き込む。
+
+  
 
 ビルド
 --------
