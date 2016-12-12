@@ -1,10 +1,9 @@
 #include "image/Image.hpp"
-//#include "gui/IPviewer.hpp"
-#include <QCoreApplication>
+#include "gui/IPviewer.hpp"
 #include <iostream>
 
-/*
-int main(int argc, char* argv[]){
+
+int main(int argc, char** argv){
 
     std::cout << "argv[1]:" << argv[1] << std::endl;
     if (!argv[1]){
@@ -14,13 +13,10 @@ int main(int argc, char* argv[]){
     Image img(argv[1]);
     img.extract_contour(2);
     
-    //img.show(GRAY);
-    //img.show(AFTER);
-
+    myApp app;
+    app.init(argc, argv);
 
 
     
     return 0;
 }
-
-*/

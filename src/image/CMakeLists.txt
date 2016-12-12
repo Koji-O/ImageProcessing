@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 add_library(Image STATIC
-  image.cpp
+  Image.cpp
   coreSharpening.cpp    
   coreRemoveNoise.cpp
   coreExtractObject.cpp 
