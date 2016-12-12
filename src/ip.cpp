@@ -1,8 +1,9 @@
 #include "image/Image.hpp"
+//#include "gui/IPviewer.hpp"
+#include <QCoreApplication>
 #include <iostream>
-#include <wx/wx.h>
 
-
+/*
 int main(int argc, char* argv[]){
 
     std::cout << "argv[1]:" << argv[1] << std::endl;
@@ -14,10 +15,12 @@ int main(int argc, char* argv[]){
     img.extract_contour(2);
     
     //img.show(GRAY);
-    img.show(AFTER);    
+    //img.show(AFTER);
+
+
+
     
     return 0;
 }
 
-
-
+*/
