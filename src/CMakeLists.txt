@@ -10,7 +10,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(../includes/)
 include_directories(BEFORE ${QTDIR}/include)
 
-add_definitions(-Wall -O2 -std=c++11 ${Qt5Widgets_DEFINITIONS} -iframework ${QTDIR}/lib)
+add_definitions(-Wall -O2 -std=c++11 ${Qt5Widgets_DEFINITIONS} -iframework ${QTDIR}/lib -fPIC)
 add_subdirectory(image)
 add_subdirectory(utils)
 add_subdirectory(gui)
