@@ -1,4 +1,4 @@
-project(ch3)
+project(ip)
 cmake_minimum_required(VERSION 2.8)
 
 SET(CMAKE_CXX_COMPILER /usr/bin/clang++ )

@@ -1,6 +1,6 @@
 #ifndef __IPVIEWER_HPP
 #define __IPVIEWER_HPP
-class myApp{
+class IpApp{
 public:
     int init(int argc,char** argv);
 };

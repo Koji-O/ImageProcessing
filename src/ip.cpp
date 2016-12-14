@@ -1,4 +1,3 @@
-#include "image/Image.hpp"
 #include "gui/IPviewer.hpp"
 #include <iostream>
 
@@ -10,13 +9,8 @@ int main(int argc, char** argv){
         throw std::invalid_argument("argv[1]: Please Image data.");
     }
     
-    Image img(argv[1]);
-    img.extract_contour(2);
-    
-    myApp app;
-    app.init(argc, argv);
-
-
+    IpApp ipapp;
+    ipapp.init(argc, argv);
     
     return 0;
 }

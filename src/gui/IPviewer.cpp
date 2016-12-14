@@ -1,11 +1,15 @@
 #include "IPviewer.hpp"
 #include <QApplication>
 #include <QLabel>
+#include <QWindow>
+#include <QtWidgets>
 
 
-int myApp::init(int argc,char** argv){
+int IpApp::init(int argc,char** argv){
     QApplication app(argc, argv);
     QLabel* label = new QLabel("Hello Qt!");
-    label->show();
+    QWindow* w = new QWindow();
+    w->show();
     return app.exec();
 }
+

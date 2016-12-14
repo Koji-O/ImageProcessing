@@ -32,6 +32,10 @@ linux環境、mac環境ではビルドが実行できることを確認してい
    export QTDIR=/usr/local/lib/qt5
    を書き込む。
 
+::
+
+   さらに、macの場合、qt4をbrew経由でインストールしているとコンパイルが通らないため、アンインストールするかcmakeを書き直す必要があります。
+   
   
 
 ビルド
@@ -49,9 +53,8 @@ linux環境、mac環境ではビルドが実行できることを確認してい
 
 .. code::
 
-   ./run.exe datas/lena.png
+   ./ip.exe sample/lena.png
    
-実行するサンプルプログラムを扁壺する場合は,main.cppのコメントアウトを外してください。
    
 参考文献
 ---------
