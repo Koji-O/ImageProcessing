@@ -5,7 +5,7 @@
 #include <QCommandLineOption>
 
 #include "IPviewer.hpp"
-#include "MainWindow.hpp"
+#include "mainwindow.hpp"
 
 int IpApp::init(int argc,char** argv)
 {

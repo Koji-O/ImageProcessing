@@ -1,6 +1,6 @@
 #include <QtWidgets>
 
-#include "IPWindow.hpp"
+#include "mainwindow.hpp"
 
 /*
   ref:

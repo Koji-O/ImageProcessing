@@ -7,10 +7,8 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+    void loadFile(const QString &fileName);
 
-    void loadFile(const QString &filename);
-
-    
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
