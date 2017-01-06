@@ -106,7 +106,10 @@ void prewitt(cv::Mat in_img, cv::Mat out_img, int amp)
 bool hilditch(cv::Mat in_img, cv::Mat out_img, int amp)
 // 細分化をする
 {
-
+    int flg = 1;
+    int i, j, k, n;
+    int p[9];
+    
     return true;
 }
 

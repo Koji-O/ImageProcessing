@@ -1,5 +1,6 @@
 #ifndef __IPWINDOW_HPP
 #define __IPWINDOW_HPP
+#include <QtWidgets>
 
 class MainWindow : public QMainWindow
 {
@@ -19,9 +20,9 @@ private slots:
     bool saveAs();
     void about();
     void documentWasModified();
-#ifdef QT_NO_SESSIONMANAGER
-    void commitData(QSessionManager &);
-#endif
+    //#ifdef QT_NO_SESSIONMANAGER
+    //void commitData(QSessionManager &);
+    //#endif
 
 private:
     void createActions();
@@ -29,10 +30,11 @@ private:
     void readSettings();
     void writeSettings();
     bool maybeSave();
-    bool saveCurrentFile(const QString &filenNmae);
-    QString strippedNmae(const QString &fullFileName);
+    bool saveFile(const QString &fileName);
+    void setCurrentFile(const QString &fileName);
+    QString strippedName(const QString &fullFileName);
 
-    QPlainTextEdit *testEdit;
+    QPlainTextEdit *textEdit;
     QString curFile;
 };
 #endif

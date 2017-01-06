@@ -4,4 +4,5 @@ add_library(IPGUI STATIC
   IPmodeler.cpp 
   IPcontroller.cpp
   mainwindow.cpp
+  imageviewer.cpp
   )

@@ -15,14 +15,15 @@ MainWindow::MainWindow()
     createStatusBar();
 
     readSettings();
-
     connect(textEdit->document(), &QTextDocument::contentsChanged,
             this, &MainWindow::documentWasModified);
 
 #ifndef QT_NO_SESSIONMANAGER
+    /*
     QGuiApplication::setFallbackSessionManagementEnabled(false);
     connect(qApp, &QGuiApplication::commitDataRequest,
             this, &MainWindow::commitData);
+    */
 #endif
     setCurrentFile(QString());
     setUnifiedTitleAndToolBarOnMac(true);
@@ -67,7 +68,7 @@ bool MainWindow::save()
 bool MainWindow::saveAs()
 {
     QFileDialog dialog(this);
-    dialog.setWindowModality(Qt::WindowModel);
+    dialog.setWindowModality(Qt::WindowModal);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     if (dialog.exec() != QDialog::Accepted)
         return false;
@@ -76,7 +77,7 @@ bool MainWindow::saveAs()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About Application."));
+    QMessageBox::about(this, tr("About Application."), tr("long discription"));
 }
 
 void MainWindow::documentWasModified()
@@ -96,36 +97,35 @@ void MainWindow::createActions()
     fileMenu->addAction(newAct);
     fileToolBar->addAction(newAct);
 
-    const QIcon openIcon = Icon::fromTheme("document-open", QIcon(":/images/open.png"));
+    const QIcon openIcon = QIcon::fromTheme("document-open", QIcon(":/images/open.png"));
     QAction *openAct = new QAction(openIcon, tr("&Open"), this);
     openAct->setShortcuts(QKeySequence::Open);
     openAct->setStatusTip(tr("Opening an existing file"));
-    connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+    connect(openAct, &QAction::triggered, this, &MainWindow::open);
     fileMenu->addAction(openAct);
     fileToolBar->addAction(openAct);
 
-    const QIcon saveIcon = Icon::fromTheme("document-save", QIcon(":/images/save.png"));
+    const QIcon saveIcon = QIcon::fromTheme("document-save", QIcon(":/images/save.png"));
     QAction *saveAct = new QAction(saveIcon, tr("&Save"), this);
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Saveing an existing file"));
-    connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::save);
     fileMenu->addAction(saveAct);
     fileToolBar->addAction(saveAct);
 
     
-    
-
-    
-    QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
-    aboutQtAct->setStatusTip(tr("Show the Qt liblary's About box"));
+    //QAction *aboutQtAct = helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+    //aboutQtAct->setStatusTip(tr("Show the Qt liblary's About box"));
     
             
 
 #ifndef QT_NO_CLIPBOARD
+    /*
     cutAct->setEnabled(false);
     copyAct->setEnabled(false);
     connect(textEdit, &QPlainTextEdit::copyAvailable, cutAct, &QAction::setEnabled);
     connect(textEdit, &QPlainTextEdit::copyAvailable, copyAct, &QAction::setEnabled);
+    */
 #endif // !QT_NO_CLIPBOARD
 }
 
