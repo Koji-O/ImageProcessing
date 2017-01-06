@@ -10,7 +10,8 @@
 
 #define BEFORE 0
 #define AFTER 1
-#define GRAY 2
+#define TEMP 2
+#define GRAY 3
 
 class Image
 {
@@ -19,6 +20,7 @@ private:
     cv::Mat img;
     cv::Mat gray_img;
     cv::Mat post_img;
+    cv::Mat tmp_img;
 public:
     Image(char *filename_in);
     ~Image();

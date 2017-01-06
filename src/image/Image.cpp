@@ -35,6 +35,10 @@ void Image::show(unsigned char f)
         cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
         cv::imshow(filename, post_img);
         cv::waitKey(0);
+    }else if(f == TEMP){
+        cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
+        cv::imshow(filename, tmp_img);
+        cv::waitKey(0);
     }else if(f == GRAY){
         cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
         cv::imshow(filename, gray_img);
@@ -44,19 +48,24 @@ void Image::show(unsigned char f)
 
 void Image::extract_contour(int f)
 {
+    //from coreExtractContour.hpp
     switch(f){
     case 1:
         enum CTYPE{
             GRAD1D, ROVERTS, SOBEL,
         };
         std::cout << "gradient_difference." << std::endl;
-        diff_grad(gray_img, post_img, 4, SOBEL);
+        diff_grad(gray_img, post_img, 5, ROVERTS);
         break;
     case 2:
         std::cout << "template_matching." << std::endl;
         template_matching(gray_img, post_img, 2);
         break;
     case 3:
+        std::cout << "thinning." << std::endl;
+        diff_grad(gray_img, post_img, 5, ROVERTS);
+        tmp_img = post_img.clone();
+        hilditch(tmp_img, post_img);
         break;
     default:
         std::cout << "Error arguments in extract_contour. " << std::endl;

@@ -1,31 +1,45 @@
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
+#include <QtWidgets>
 #include <iostream>
 
 #include "IPviewer.hpp"
 #include "mainwindow.hpp"
 #include "imageviewer.hpp"
 
-int IpApp::init(int argc,char** argv)
+int IpApp::start(int argc,char** argv)
 {
     //Q_INIT_RESOURCE(application);
-
     QApplication app(argc, argv);
-    QGuiApplication::setApplicationDisplayName(ImageViewer::tr("Image Viewer"));
-    QCommandLineParser commandLineParser;
-    commandLineParser.addHelpOption();
-    commandLineParser.addPositionalArgument(ImageViewer::tr("[file]"), ImageViewer::tr("Image file to open."));
-    commandLineParser.process(QCoreApplication::arguments());
-    ImageViewer imageViewer;
-    if (!commandLineParser.positionalArguments().isEmpty()
-        && !imageViewer.loadFile(commandLineParser.positionalArguments().front())) {
-        std::cout << "error" << std::endl;
-        std::cout << imageViewer.loadFile(commandLineParser.positionalArguments().front()) << std::endl;
-        return -1;
-    }
-    imageViewer.loadFile(commandLineParser.positionalArguments().front());
-    imageViewer.show();
+    QWidget w;
+    
+    QPushButton *b =
+        new QPushButton(QApplication::translate("", "b"), &w);
+    QPushButton *b1 =
+        new QPushButton(QApplication::translate("", "b1"), &w);
+    
+    
+    QSize size = QSize(640,480);
+    QImage::Format format = QImage::Format_ARGB32;
+    QImage qimg = QImage::QImage(size, format);        
+    qimg.load("../sample/lene.png");
+
+    QLabel lbl;
+    lbl.setPixmap(QPixmap::fromImage(qimg));
+    lbl.show();
+
+
+    QVBoxLayout *blyt = new QVBoxLayout();
+    blyt->addWidget(b);
+    blyt->addWidget(b1);    
+    
+    QHBoxLayout *mainlyt = new QHBoxLayout();
+    mainlyt->addLayout(blyt);
+    //mainlyt->addWidget(qimg);    
+    //mainlyt->addWidget(qimg2);            
+
+
+    w.setLayout(mainlyt);
+    //w.show();
     return app.exec();
 }
+
 

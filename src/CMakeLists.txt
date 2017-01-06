@@ -10,11 +10,12 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(../includes/)
 include_directories(BEFORE ${QTDIR}/include)
 
-add_definitions(-Wall -O2 -std=c++11 ${Qt5Widgets_DEFINITIONS} -iframework ${QTDIR}/lib -fPIC -stdlib=libc++)
+#add_definitions(-Wall -O2 -std=c++11 ${Qt5Widgets_DEFINITIONS} -iframework ${QTDIR}/lib -fPIC -stdlib=libc++)
+add_definitions(-Wall -O2 -std=c++11 ${Qt5Widgets_DEFINITIONS} ${QTDIR}/lib -fPIC -lstdc++)
 add_subdirectory(image)
-add_subdirectory(utils)
-add_subdirectory(gui)
+#add_subdirectory(utils)
+#add_subdirectory(gui)
 
 add_executable(${PROJECT_NAME} ip.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} Qt5::Widgets Image Utils IPGUI)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} Qt5::Widgets Image )#IPGUI) #Utils IPGUI)

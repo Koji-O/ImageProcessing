@@ -2,7 +2,7 @@
 #define __IPVIEWER_HPP
 class IpApp{
 public:
-    int init(int argc,char** argv);
+    int start(int argc,char** argv);
 };
 
 #endif
