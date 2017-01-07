@@ -9,6 +9,7 @@ bool template_matching(cv::Mat in_img, cv::Mat out_img, int amp);
 void prewitt(cv::Mat in_img, cv::Mat out_img, int amp);
 bool hilditch(cv::Mat in_img, cv::Mat out_img);
 int ncon(std::vector<int> p);
+void laplacian(cv::Mat in_img, cv::Mat out_img, int amp, int type);
 
 #endif
 

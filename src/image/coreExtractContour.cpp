@@ -10,13 +10,13 @@
 #include <cstdlib>
 #include <cmath>
 
-/*
+/* *****************************
   １次微分を用いて輪郭を抽出する。
   in_img  ::  入力画像配列 
   out_img ::  出力画像配列
   amp     ::  出力画像の比例係数
-  type    ::  計算方法の設定(gradient_1d, roverts, sobel)
-*/
+  type    ::  計算方法の設定(GRAD1D, ROVERTS, SOBEL)
+  ***************************** */
 bool diff_grad(cv::Mat in_img, cv::Mat out_img, int amp, int type)
 {
     enum CTYPE{
@@ -46,7 +46,6 @@ bool diff_grad(cv::Mat in_img, cv::Mat out_img, int amp, int type)
     return true;
 }
 
-void gradient(cv::Mat in_img, cv::Mat out_img, int amp, std::vector<int> cx, std::vector<int> cy)
 /*
   １次微分を用いて輪郭を抽出する。
   in_img  ::  入力画像配列 
@@ -54,6 +53,7 @@ void gradient(cv::Mat in_img, cv::Mat out_img, int amp, std::vector<int> cx, std
   amp     ::  出力画像の比例係数
   cx,cy   ::  微分オペレータ
 */
+void gradient(cv::Mat in_img, cv::Mat out_img, int amp, std::vector<int> cx, std::vector<int> cy)
 {
     std::vector<int> m(9);
     int d[3] = {-1, 0, 1};
@@ -78,6 +78,13 @@ void gradient(cv::Mat in_img, cv::Mat out_img, int amp, std::vector<int> cx, std
     }
 }
 
+
+/* *****************************
+  テンプレートマッチングを用いて輪郭を抽出する。
+  in_img  ::  入力画像配列 
+  out_img ::  出力画像配列
+  amp     ::  出力画像の比例係数
+ ***************************** */
 bool template_matching(cv::Mat in_img, cv::Mat out_img, int amp)
 {
     prewitt(in_img, out_img, amp);
@@ -116,11 +123,13 @@ void prewitt(cv::Mat in_img, cv::Mat out_img, int amp)
     }
 }
 
-bool hilditch(cv::Mat in_img, cv::Mat out_img)
-/* ２値画像線形化する
+
+/* *****************************
+   hilditch法用いて２値画像線形化する 
    in_img  :   入力画像配列（２値画像配列）
    out_img :   出力画像配列
- */
+   ***************************** */
+bool hilditch(cv::Mat in_img, cv::Mat out_img)
 {
     bool flg = true;
     std::vector<int> p(9); /* 図形: 1, 背景: 0, 背景候補: -1 */
@@ -183,10 +192,11 @@ bool hilditch(cv::Mat in_img, cv::Mat out_img)
     return true;
 }
 
-int ncon(std::vector<int> p)
 /*
   連結数を計算する。
- */
+  Hildich法で使用する関数.
+*/
+int ncon(std::vector<int> p)
 {
     int q[9];
     int n;
@@ -204,3 +214,40 @@ int ncon(std::vector<int> p)
     }
     return n;
 }
+
+/* ********************
+  ラプラシアン法(２次微分)を用いて輪郭線を抽出する。
+  in_img  :   入力画像配列（２値画像配列）
+  out_img :   出力画像配列
+  amp     ::  出力画像の比例係数
+  type    ::  計算方法の設定(1, 2, 3) 微分オペレータの指定
+  ******************** */
+void laplacian(cv::Mat in_img, cv::Mat out_img, int amp, int type)
+{
+    int c[3][9] = {  0, -1,  0, -1,  4, -1,  0, -1,  0,
+                    -1, -1, -1, -1,  8, -1, -1, -1, -1,
+                     1, -2,  1, -2,  4, -2,  1, -2,  1};
+
+    int d;
+    int e[3] = {-1, 0, 1};
+    int OFFSET = 128;
+    
+    type--;
+    if(type < 0 ) type = 0;
+    if(type > 2 ) type = 2;
+    for(int i = 1; i < in_img.size().height + 1 ; i++){
+        for(int j = 1; j < in_img.size().width + 1 ; j++){
+            d = 0;
+            for(int k = 0; k < 3; k++){
+                d +=  c[type][k] * in_img.at<uchar>(i - 1, j + e[k])
+                    + c[type][k + 3] * in_img.at<uchar>(i, j + e[k])
+                    + c[type][k + 6] * in_img.at<uchar>(i + 1, j + e[k]);
+            }
+            d = (int)(d * amp) + OFFSET;
+            if(d < 0) d = 0;
+            if(d > 255) d = 255;
+            out_img.at<uchar>(i, j) = (unsigned char) d;
+        }
+    }
+}
+

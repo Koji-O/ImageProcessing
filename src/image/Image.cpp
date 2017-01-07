@@ -67,6 +67,10 @@ void Image::extract_contour(int f)
         tmp_img = post_img.clone();
         hilditch(tmp_img, post_img);
         break;
+    case 4:
+        std::cout << "Laplacian." << std::endl;
+        laplacian(gray_img, post_img, 5, 1);
+        break;
     default:
         std::cout << "Error arguments in extract_contour. " << std::endl;
         break;
