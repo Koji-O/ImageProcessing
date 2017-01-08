@@ -2,6 +2,7 @@
  * @file coreExtractContour.cpp
  * @brief 画像の輪郭を抽出する関数群
  */
+#include "imageConst.hpp"
 #include "coreExtractContour.hpp"
 
 #include <opencv2/opencv.hpp>
@@ -9,6 +10,10 @@
 #include <numeric>
 #include <cstdlib>
 #include <cmath>
+
+#define PI 3.141592
+#define DMAX 1000
+
 
 /* *****************************
   １次微分を用いて輪郭を抽出する。
@@ -60,8 +65,8 @@ void gradient(cv::Mat in_img, cv::Mat out_img, int amp, std::vector<int> cx, std
     double xx, yy, zz;
     int ele;
 
-    for(int i = 1; i < in_img.size().height + 1 ; i++){
-        for(int j = 1; j < in_img.size().width + 1 ; j++){
+    for(int i = 1; i < in_img.size().height - 1 ; i++){
+        for(int j = 1; j < in_img.size().width - 1 ; j++){
             out_img.at<uchar>(i, j) = (unsigned char)0;
             for(int k = 0; k < 3; k++){
                 m[k] = in_img.at<uchar>(i - 1, j + d[k]);
@@ -139,7 +144,7 @@ bool hilditch(cv::Mat in_img, cv::Mat out_img)
     /* pの配列を反時計回りに操作するための列のインデックス */
     int n; 
 
-    int TMP = 128;
+    int TMP = OFFSET;
     
     while (flg){
         flg = false;
@@ -149,8 +154,8 @@ bool hilditch(cv::Mat in_img, cv::Mat out_img)
                     p[k] = in_img.at<uchar>(i + i_idx[k], j + j_idx[k]);
 
                 for(auto &x : p){
-                    if (x == 255) x = 1;
-                    else if(x == 0) x = 0;
+                    if (x == HIGH) x = 1;
+                    else if(x == LOW) x = 0;
                     else x = -1;
                 }
                 /* 条件１：図形の一部である */
@@ -224,19 +229,17 @@ int ncon(std::vector<int> p)
   ******************** */
 void laplacian(cv::Mat in_img, cv::Mat out_img, int amp, int type)
 {
-    int c[3][9] = {  0, -1,  0, -1,  4, -1,  0, -1,  0,
-                    -1, -1, -1, -1,  8, -1, -1, -1, -1,
-                     1, -2,  1, -2,  4, -2,  1, -2,  1};
-
+    int c[3][9] = {{  0, -1,  0, -1,  4, -1,  0, -1,  0},
+                   { -1, -1, -1, -1,  8, -1, -1, -1, -1},
+                   {  1, -2,  1, -2,  4, -2,  1, -2,  1}};
     int d;
     int e[3] = {-1, 0, 1};
-    int OFFSET = 128;
     
     type--;
     if(type < 0 ) type = 0;
     if(type > 2 ) type = 2;
-    for(int i = 1; i < in_img.size().height + 1 ; i++){
-        for(int j = 1; j < in_img.size().width + 1 ; j++){
+    for(int i = 1; i < in_img.size().height - 1 ; i++){
+        for(int j = 1; j < in_img.size().width - 1 ; j++){
             d = 0;
             for(int k = 0; k < 3; k++){
                 d +=  c[type][k] * in_img.at<uchar>(i - 1, j + e[k])
@@ -244,10 +247,169 @@ void laplacian(cv::Mat in_img, cv::Mat out_img, int amp, int type)
                     + c[type][k + 6] * in_img.at<uchar>(i + 1, j + e[k]);
             }
             d = (int)(d * amp) + OFFSET;
-            if(d < 0) d = 0;
-            if(d > 255) d = 255;
+            if(d < LOW) d = LOW;
+            if(d > HIGH) d = HIGH;
             out_img.at<uchar>(i, j) = (unsigned char) d;
         }
     }
 }
+
+/* ********************
+  ゼロ交差法を用いて輪郭線を抽出する。
+  in_img  :   入力画像配列（２値画像配列）
+  out_img :   出力画像配列
+  ******************** */
+void zero_cross(cv::Mat in_img, cv::Mat out_img)
+{
+    out_img = cv::Mat::zeros(out_img.size(), CV_8UC1);
+    
+    for(int i = 1; i < in_img.size().height - 1 ; i++){
+        for(int j = 1; j < in_img.size().width - 1 ; j++){
+            if((int)in_img.at<uchar>(i, j) == OFFSET){
+                if(((int)in_img.at<uchar>(i, j+1) - OFFSET)
+                   * ((int)in_img.at<uchar>(i, j-1) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i+1, j) - OFFSET)
+                   * ((int)in_img.at<uchar>(i-1, j) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i+1, j+1) - OFFSET)
+                   * ((int)in_img.at<uchar>(i-1, j-1) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i+1, j-1) - OFFSET)
+                   * ((int)in_img.at<uchar>(i-1, j+1) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+            }else{
+                if(((int)in_img.at<uchar>(i, j) - OFFSET)
+                   * ((int)in_img.at<uchar>(i, j-1) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i, j) - OFFSET)
+                   * ((int)in_img.at<uchar>(i-1, j) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i, j) - OFFSET)
+                   * ((int)in_img.at<uchar>(i+1, j) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+                if(((int)in_img.at<uchar>(i, j) - OFFSET)
+                   * ((int)in_img.at<uchar>(i, j+1) - OFFSET) < 0)
+                    out_img.at<uchar>(i, j) = HIGH;
+            }
+        }
+    }
+}
+
+
+/* ********************
+  Hough変換による直線抽出
+  in_img    :   入力画像配列 (2値画像)
+  out_img   :   出力画像配列
+  hough_img :   出力画像配列 (Hough変換)
+  thresh    :   閾値
+  buf       :   メッセージ用バッファ
+ ******************** */
+void hough(cv::Mat in_img, cv::Mat out_img, cv::Mat hough_img, int thresh, char *buf)
+{
+    double rho, theta, d, a;
+    double p[DMAX][2];
+    int posi, m, v, n;
+    int xsize = in_img.size().width;
+    int ysize = in_img.size().height;
+    
+    d = PI / xsize;
+    a = ysize/2/sqrt(xsize/2 * xsize/2 + ysize/2 * ysize/2);
+    
+    hough_img = cv::Mat::zeros(in_img.size(), CV_8UC1);    
+
+    for(int i = 1; i < ysize - 1 ; i++){
+        for(int j = 1; j < xsize - 1 ; j++){
+            if(in_img.at<uchar>(i, j) != HIGH) continue;
+            for(int k = 0; k < xsize ; k++){
+                theta = k * d;
+                rho = (j - xsize/2) * cos(theta) + (ysize/2 - i) * sin(theta);
+                v = (int)(rho * a + ysize/2 + 0.5);
+                std::cout << v << std::endl;
+                if (v >= 0 && v < ysize)
+                    if( hough_img.at<uchar>(v, k) < 255) hough_img.at<uchar>(v, k) += 1;
+            }
+        }
+    }
+    
+    n = 0;
+    posi = 0;
+    for(int i = 1; i < ysize - 1 ; i++){
+        for(int j = 1; j < xsize - 1 ; j++){
+            if(hough_img.at<uchar>(i, j) < thresh) continue;
+            if(i != 0 && j != 0 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i-1, j-1)) continue;
+            if(i != 0 && 
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i-1, j)) continue;
+            if(i != 0 && j != xsize-1 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i-1, j+1)) continue;
+            if(j != 0 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i, j-1)) continue;
+            if(j != xsize-1 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i, j+1)) continue;
+            if(i != ysize-1 && j != 0 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i+1, j-1)) continue;
+            if(i != ysize-1 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i+1, j)) continue;
+            if(i != ysize-1 && j != xsize-1 &&
+               hough_img.at<uchar>(i, j) < hough_img.at<uchar>(i+1, j+1)) continue;
+
+            theta = j * d;
+            rho = (i - ysize/2) / a;
+            p[n][0] = rho;
+            p[n][1] = theta;
+            n++;
+            //m = sprintf(&buf[posi], "theta = %10.3lf, rho = %10.3lf, value = %5d\n", theta * 180/PI, rho, hough_img.at<uchar>(i, j));
+            //posi += m;
+            if(n == DMAX) return;
+        }
+    }
+    out_img = in_img.clone();
+
+    for(int i = 0; i < n; i++)
+        hough_line(in_img, out_img, p[i][0], p[i][1]);
+}
+
+void hough_line(cv::Mat in_img, cv::Mat out_img, double rho, double theta)
+{
+    int xsize = in_img.size().width;
+    int ysize = in_img.size().height;
+    int i, j;
+    
+    if((theta >= 0 && theta < PI/4 ) || theta >= 3*PI / 4){
+        for( int i = 0; i < ysize ; i++){
+            j = (int)((rho - (ysize/2 - i) * sin(theta))
+                      /cos(theta) + xsize/2 + 0.5);
+            if(j >= 0 && j < xsize)
+                in_img.at<uchar>(i, j) = 255;
+        }
+    } else {
+        for( int j = 0; j < ysize ; j++){
+            i = (int)((-rho + (j - xsize/2) * cos(theta))
+                      /sin(theta) + ysize/2 + 0.5);
+            if(i >= 0 && i < xsize)
+                in_img.at<uchar>(i, j) = 255;
+        }
+    }
+}
+
+
+/* ********************
+   rho1, theta1 : 直線1
+   rho2, theta2 : 直線2   
+   x, y         : 交点
+******************** */ 
+void hough_cross(double theta1, double rho1, double theta2, double rho2, double *x, double *y)
+{
+    double d, t1, t2;
+    
+    t1 = theta1 * PI / 180.0;
+    t2 = theta2 * PI / 180.0;    
+
+    d = sin(t1 - t2);
+    if(d == 0) return;
+    *x = (rho2 * sin(t1) - rho2 * sin(t2)) / d;
+    *y = (rho1 * cos(t2) - rho2 * cos(t1)) / d;
+}
+    
 

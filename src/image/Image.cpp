@@ -4,7 +4,6 @@
 #include "coreExtractObject.hpp"
 #include "coreExtractContour.hpp"
 
-#include <string>
 #include <opencv2/opencv.hpp>
 
 Image::Image(char *filename_in)
@@ -71,9 +70,31 @@ void Image::extract_contour(int f)
         std::cout << "Laplacian." << std::endl;
         laplacian(gray_img, post_img, 5, 1);
         break;
+    case 5:
+        std::cout << "Zero_Cross." << std::endl;
+        zero_cross(gray_img, post_img);
+        break;
+    case 6:
+        std::cout << "Hough." << std::endl;
+        char buf[255];
+        tmp_img = post_img.clone();
+        hough(gray_img, post_img, tmp_img, 10, buf);
+        break;
     default:
         std::cout << "Error arguments in extract_contour. " << std::endl;
         break;
     }
 }
 
+void Image::remove_noise(int f)
+{
+    switch(f){
+    case 1:
+        std::cout << "Moving_Average_Methods." << std::endl;
+        //smooth(gray_img, post_img, 7);
+        noise_rand(gray_img, post_img, 50);
+        break;
+    default:
+        break;
+    }
+}

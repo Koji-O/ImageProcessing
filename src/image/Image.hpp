@@ -27,6 +27,7 @@ public:
     
     void show(unsigned char f);
     void extract_contour(int f);
+    void remove_noise(int f);
     /*
     void resize(void);
     void cvimg2mat(void);

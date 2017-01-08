@@ -12,9 +12,11 @@ int main(int argc, char** argv){
     Image img(argv[1]);
     //img.show(BEFORE);
 
-    img.extract_contour(4);
-
+    //img.extract_contour(6);
+    img.remove_noise(1);
+    
     img.show(AFTER);
+    //img.show(TEMP);
 
     /* For GUI */
     // IpApp ipapp;
