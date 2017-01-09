@@ -55,7 +55,6 @@ void noise_rand(cv::Mat in_img, cv::Mat out_img, int level)
     std::uniform_real_distribution<double> ur(-0.5, 0.5);
     mt.seed(0);
     
-
     for(int i = 0; i < in_img.size().height ; i++){
         for(int j = 0; j < in_img.size().width ; j++){
             noise = (int)(ur(mt) * 2.0 * level);
@@ -67,9 +66,39 @@ void noise_rand(cv::Mat in_img, cv::Mat out_img, int level)
     }
 }
 
+/* ********************
+   重み付き移動平均法
+   in_img  : 入力画像配列
+   out_img : 出力画像配列
+   type    : 重み係数(1, 2, 3)
+******************** */
 void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type)
 {
+    itn xsize = in_img.size().height;
+    int ysize = in_img.size().height;
+    double f;
+    double c[3][5][5] = {{{      0,      0,      0,      0,      0},
+                          {      0, 1.0/10, 1.0/10, 1.0/10,      0},
+                          {      0, 1.0/10, 2.0/10, 1.0/10,      0},    
+                          {      0, 1.0/10, 1.0/10, 1.0/10,      0},        
+                          {      0,      0,      0,      0,      0}},
+                         {{      0,      0,      0,      0,      0},
+                          {      0, 1.0/16, 2.0/16, 1.0/16,      0},
+                          {      0, 2.0/16, 4.0/16, 2.0/16,      0},    
+                          {      0, 1.0/16, 2.0/16, 1.0/16,      0},        
+                          {      0,      0,      0,      0,      0}},                         
+                         {{ 0.0030, 0.0133, 0.0219, 0.0133, 0.0030},
+                          { 0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
+                          { 0.0219, 0.0983, 0.1621, 0.0983, 0.0219},
+                          { 0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
+                          { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030}}};
+
+
+    
+    if (type < 1)  type = 1;
+    if (type > 3)  type = 3;
 }
+
 
 void median(cv::Mat in_img, cv::Mat out_img)
 {
