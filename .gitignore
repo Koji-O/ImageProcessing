@@ -28,7 +28,7 @@
 *.out
 *.app
 build/*
-doc/build/*
+docs/build/*
 
 #emacs
 *~
@@ -37,3 +37,5 @@ doc/build/*
 #for 
 ip
 !.gitkeep
+
+venv/*

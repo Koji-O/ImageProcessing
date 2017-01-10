@@ -1,7 +1,11 @@
-|Travis|_
+|Travis|_ ||
 
 .. |Travis| image:: https://travis-ci.org/Koji-O/ImageProcessing.svg?branch=master
 .. _Travis: https://travis-ci.org/Koji-O/ImageProcessing
+
+.. image:: https://readthedocs.org/projects/imageprocessing/badge/?version=latest
+   :target: http://imageprocessing.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 
 
 C言語で学ぶ実践画像処理
@@ -11,7 +15,6 @@ C言語で学ぶ実践画像処理
 -------------
 
 - https://github.com/Koji-O/ImageProcessing
-
 
 必要環境
 ---------
