@@ -74,8 +74,8 @@ void noise_rand(cv::Mat in_img, cv::Mat out_img, int level)
 ******************** */
 void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type)
 {
-    itn xsize = in_img.size().height;
-    int ysize = in_img.size().height;
+    int wsize = in_img.size().width;
+    int hsize = in_img.size().height;
     double f;
     double c[3][5][5] = {{{      0,      0,      0,      0,      0},
                           {      0, 1.0/10, 1.0/10, 1.0/10,      0},
@@ -97,6 +97,21 @@ void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type)
     
     if (type < 1)  type = 1;
     if (type > 3)  type = 3;
+    for(int i=1; i<hsize ;i++){
+        for(int j=1; j<wsize ;j++){
+            f = 0.0;
+            for(int m = -2; m <= 2 ; m++){
+                for(int n = -2; n <= 2 ; n++){
+                    if((i+m >= 0) && (i+m <= hsize-1) &&
+                       (j+n >= 0) && (j+n <= wsize-1))
+                        f += in_img.at<uchar>(i+m, j+n) * c[type-1][2+m][2+n];
+                }
+            }
+            if(f < 0) f = 0;
+            if(f > 255) f = 255;
+            out_img.at<uchar>(i, j) = (unsigned char)f;
+        }
+    }            
 }
 
 
