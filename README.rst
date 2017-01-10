@@ -1,4 +1,4 @@
-|Travis|_ 
+|Travis|_ |docs|
 
 .. |Travis| image:: https://travis-ci.org/Koji-O/ImageProcessing.svg?branch=master
 .. _Travis: https://travis-ci.org/Koji-O/ImageProcessing
