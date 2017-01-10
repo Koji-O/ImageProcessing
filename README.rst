@@ -1,9 +1,9 @@
-|Travis|_ ||
+|Travis|_ 
 
 .. |Travis| image:: https://travis-ci.org/Koji-O/ImageProcessing.svg?branch=master
 .. _Travis: https://travis-ci.org/Koji-O/ImageProcessing
 
-.. image:: https://readthedocs.org/projects/imageprocessing/badge/?version=latest
+.. |docs| image:: https://readthedocs.org/projects/imageprocessing/badge/?version=latest
    :target: http://imageprocessing.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
