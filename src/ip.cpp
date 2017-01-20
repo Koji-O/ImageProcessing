@@ -13,14 +13,14 @@ int main(int argc, char** argv){
     //img.show(BEFORE);
 
     //img.extract_contour(6);
-    img.remove_noise(1);
+    //img.remove_noise(1);
     
-    img.show(AFTER);
+    //img.show(AFTER);
     //img.show(TEMP);
 
     /* For GUI */
-    // IpApp ipapp;
-    // ipapp.init(argc, argv);
+    IpApp ipapp;
+    ipapp.start(argc, argv);
     
     return 0;
 }

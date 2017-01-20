@@ -29,7 +29,7 @@
 *.app
 build/*
 docs/build/*
-
+docs/source/ch5/build
 #emacs
 *~
 \#*

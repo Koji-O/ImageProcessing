@@ -30,9 +30,17 @@ Contents:
 opencvのコンパイル
 -----------------
 
+For Ubuntu
+
 .. code-block:: bash
                
-   clang++  smooth_weigthed.cpp -I/usr/include/opencv2 -L/usr/lib/x86_64-linux-gnu/ 
+   clang++  smooth_weigthed.cpp -I/usr/include/opencv2 -L/usr/lib/x86_64-linux-gnu/
+
+For mac
+
+.. code-block:: bash
+                
+   clang++ smooth_weigthed.cpp -I /usr/local/include/ -L /usr/local/lib/ -lopencv_core -lopencv_imgcodecs 
    
 Indices and tables
 ==================

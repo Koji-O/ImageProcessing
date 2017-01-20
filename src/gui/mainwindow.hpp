@@ -19,10 +19,6 @@ private slots:
     bool save();
     bool saveAs();
     void about();
-    void documentWasModified();
-    //#ifdef QT_NO_SESSIONMANAGER
-    //void commitData(QSessionManager &);
-    //#endif
 
 private:
     void createActions();

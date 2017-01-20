@@ -2,7 +2,7 @@
 #include "coreExtractContour.hpp"
 
 #include <random>
-
+#include <vector>
 
 /* ********************
    移動平均法による雑音除去
@@ -93,7 +93,6 @@ void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type)
                           { 0.0133, 0.0596, 0.0983, 0.0596, 0.0133},
                           { 0.0030, 0.0133, 0.0219, 0.0133, 0.0030}}};
 
-
     
     if (type < 1)  type = 1;
     if (type > 3)  type = 3;
@@ -114,9 +113,27 @@ void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type)
     }            
 }
 
-
+/* ********************
+   メディアンフィルタ
+   in_img  : 入力画像配列
+   out_img : 出力画像配列
+******************** */
 void median(cv::Mat in_img, cv::Mat out_img)
 {
+    std::vector<uchar> c(9);
+    int s[3] = {-1, 0, 1};
+    
+    for(int i=1 ; i < in_img.size().height-1 ; i++){
+        for(int j=1 ; j < in_img.size().width-1 ; j++){
+            for(int k=0; k<3 ; k++){
+                c[k] = in_img.at<uchar>(i-1, j+s[k]);
+                c[k+3] = in_img.at<uchar>(i, j+s[k]);
+                c[k+6] = in_img.at<uchar>(i+1, j+s[k]);
+                std::sort(c.begin(), c.end());
+                in_img.at<uchar>(i, j) = c[4];
+            }
+        }
+    }
 }
 
 void median_value(unsigned char c[9])

@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "IPviewer.hpp"
-#include "mainwindow.hpp"
-#include "imageviewer.hpp"
+//#include "mainwindow.hpp"
+//#include "imageviewer.hpp"
 
 int IpApp::start(int argc,char** argv)
 {
@@ -20,11 +20,11 @@ int IpApp::start(int argc,char** argv)
     QSize size = QSize(640,480);
     QImage::Format format = QImage::Format_ARGB32;
     QImage qimg = QImage::QImage(size, format);        
-    qimg.load("../sample/lene.png");
+    qimg.load(argv[1]);
 
     QLabel lbl;
     lbl.setPixmap(QPixmap::fromImage(qimg));
-    lbl.show();
+    //lbl.show();
 
 
     QVBoxLayout *blyt = new QVBoxLayout();
@@ -38,8 +38,20 @@ int IpApp::start(int argc,char** argv)
 
 
     w.setLayout(mainlyt);
-    //w.show();
+    w.show();
     return app.exec();
 }
 
+class ImgViewer : QMainWindow {
+    //Q_OBJECT
+public:
+    ImgViewer();
+private:
+    QGroupBox *imgBox;
 
+    
+};
+    
+    
+
+    
