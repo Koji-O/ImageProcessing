@@ -20,8 +20,8 @@ endif()
   
 add_subdirectory(image)
 #add_subdirectory(utils)
-add_subdirectory(gui)
+#add_subdirectory(gui)
 
 add_executable(${PROJECT_NAME} ip.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} Qt5::Widgets Image IPGUI) #Utils IPGUI)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} Qt5::Widgets Image )#IPGUI) #Utils IPGUI)

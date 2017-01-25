@@ -131,17 +131,17 @@ void median(cv::Mat in_img, cv::Mat out_img)
                 c[k+6] = in_img.at<uchar>(i+1, j+s[k]);
                 std::sort(c.begin(), c.end());
                 in_img.at<uchar>(i, j) = c[4];
+                //cをソートして中央値に置き換える。
             }
         }
     }
 }
 
-void median_value(unsigned char c[9])
-{
-}
 
 void noise_spike(cv::Mat in_img, cv::Mat out_img, int number, int level)
 {
+    
+    
 }
 
 void smooth_edge_preserve(cv::Mat in_img, cv::Mat out_img)

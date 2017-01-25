@@ -94,6 +94,13 @@ void Image::remove_noise(int f)
         //smooth(gray_img, post_img, 7);
         noise_rand(gray_img, post_img, 50);
         break;
+    case 2:
+        std::cout << "median_Filter." << std::endl;
+        //smooth(gray_img, post_img, 7);
+        median(gray_img, post_img);
+        break;
+
+        
     default:
         break;
     }

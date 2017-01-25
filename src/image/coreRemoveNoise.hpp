@@ -7,7 +7,6 @@ void smooth(cv::Mat in_img, cv::Mat out_img, int type);
 void noise_rand(cv::Mat in_img, cv::Mat out_img, int level);
 void smooth_weighted(cv::Mat in_img, cv::Mat out_img, int type);
 void median(cv::Mat in_img, cv::Mat out_img);
-void median_value(unsigned char c[9]);
 void noise_spike(cv::Mat in_img, cv::Mat out_img, int number, int level);
 void smooth_edge_preserve(cv::Mat in_img, cv::Mat out_img);
 void average_minvar(unsigned char p[9][9]);
