@@ -10,7 +10,6 @@
 
 #define BEFORE 0
 #define AFTER 1
-#define TEMP 2
 #define GRAY 3
 
 class Image
