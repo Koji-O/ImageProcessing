@@ -3,6 +3,9 @@
 #include <getopt.h>
 #include <iostream>
 
+void cmdparser(int argc, char** argv);
+
+
 int main(int argc, char** argv){
     std::cout << "argv[1]:" << argv[1] << std::endl;
     if (!argv[1]){
@@ -23,4 +26,9 @@ int main(int argc, char** argv){
     //ipapp.start(argc, argv);
     
     return 0;
+}
+
+void cmdparser(int argc, char** argv){
+    
+
 }
