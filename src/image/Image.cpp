@@ -34,10 +34,6 @@ void Image::show(unsigned char f)
         cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
         cv::imshow(filename, post_img);
         cv::waitKey(0);
-    }else if(f == TEMP){
-        cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
-        cv::imshow(filename, tmp_img);
-        cv::waitKey(0);
     }else if(f == GRAY){
         cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
         cv::imshow(filename, gray_img);

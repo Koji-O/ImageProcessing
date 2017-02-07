@@ -1,8 +1,11 @@
+#include <random>
+#include <vector>
+
 #include "coreRemoveNoise.hpp"
 #include "coreExtractContour.hpp"
 
-#include <random>
-#include <vector>
+#define RAND_MAX 32767
+
 
 /* ********************
    移動平均法による雑音除去
@@ -137,11 +140,31 @@ void median(cv::Mat in_img, cv::Mat out_img)
     }
 }
 
-
+/* ********************
+   スパイクノイズ付加
+   in_img  : 入力画像配列
+   out_img : 出力画像配列
+   number  : スパイクノイズの数
+   level   : ノイズレベルの付加
+******************** */
 void noise_spike(cv::Mat in_img, cv::Mat out_img, int number, int level)
 {
+    std::mt19937_64 mt;
+    std::uniform_real_distribution<double> ur(0, 1);
+    mt.seed(0);
     
-    
+    int x, y;
+    int data, noise;
+
+    for(int i = 0; i < number; i++){
+        x = (int)(ur(mt) * in_img.size().width);
+        y = (int)(ur(mt) * in_img.size().height);
+        noise = (int)((ur(mt) - 0.5) * level * 2.0);
+        data = in_img.at<uchar>(x, y) + noise;
+        if ( data > 255)  out_img.at<uchar>(x, y) = 255;
+        else if(data < 0) out_img.at<uchar>(x, y) = 0;
+        else              out_img.at<uchar>(x, y) = data;
+    }
 }
 
 void smooth_edge_preserve(cv::Mat in_img, cv::Mat out_img)
