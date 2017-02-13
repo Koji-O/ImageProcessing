@@ -9,6 +9,9 @@ using namespace std;
 
 int option_parser(int argc, char** argv);
 
+void cmdparser(int argc, char** argv);
+
+
 int main(int argc, char** argv){
     //Image img(argv[1]);
     //img.show(BEFORE);
