@@ -59,9 +59,6 @@ int option_parser(int argc, char** argv){
             enum copt{
                 cDEFUALT, cGRAD, cTEMP, cTHIN, cLAP, cZC, cH
             };
-            string opt_;;
-            opt_ = "a";
-            
             cout << cGRAD << endl;
             break;
         case 'n' :
@@ -104,6 +101,6 @@ int option_parser(int argc, char** argv){
             return 0;
         }
     }
-
+    
     return 0;
 }
