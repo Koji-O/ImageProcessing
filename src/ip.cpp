@@ -13,21 +13,15 @@ void cmdparser(int argc, char** argv);
 
 
 int main(int argc, char** argv){
-    //Image img(argv[1]);
+    Image img(argv[1]);
     //img.show(BEFORE);
-
     //img.extract_contour(6);
-    //img.remove_noise(2);
-    
-    //img.show(AFTER);
+    img.remove_noise(2);
+    img.show(AFTER);
     //img.show(TEMP);
 
-    /* For GUI */
-    //IpApp ipapp;
-    //ipapp.start(argc, argv);
-
-    option_parser(argc, argv);
-
+    // Under Developing
+    //option_parser(argc, argv);
     
     return 0;
 }
@@ -35,7 +29,7 @@ int main(int argc, char** argv){
 int option_parser(int argc, char** argv){
     int opt;
     int index;
-    char *arg = NULL;
+    // char *arg = NULL;
     string input, output;
     string longopt;
         
@@ -62,9 +56,6 @@ int option_parser(int argc, char** argv){
             enum copt{
                 cDEFUALT, cGRAD, cTEMP, cTHIN, cLAP, cZC, cH
             };
-            string opt_;;
-            opt_ = "a";
-            
             cout << cGRAD << endl;
             break;
         case 'n' :
@@ -102,7 +93,7 @@ int option_parser(int argc, char** argv){
                  << "[-o:--output arg] "
                  << "[-c:--counter arg]" << endl;
             break;
-        case '?':
+        default:
             printf("error! \'%c\' \'%c\'\n", opt, optopt);
             return 0;
         }
