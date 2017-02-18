@@ -2,8 +2,8 @@
  * @file coreExtractContour.cpp
  * @brief 画像の輪郭を抽出する関数群
  */
-#include "imageConst.hpp"
-#include "coreExtractContour.hpp"
+#include "image_const.hpp"
+#include "extract_contour.hpp"
 
 #include <opencv2/opencv.hpp>
 #include <vector>

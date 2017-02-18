@@ -1,21 +1,21 @@
-#include "Image.hpp"
-#include "coreSharpening.hpp"
-#include "coreRemoveNoise.hpp"   
-#include "coreExtractObject.hpp"
-#include "coreExtractContour.hpp"
+#include "image.hpp"
+#include "sharpening.hpp"
+#include "remove_noise.hpp"   
+#include "extract_object.hpp"
+#include "extract_contour.hpp"
 
 #include <opencv2/opencv.hpp>
+#include <string>
 
-Image::Image(char *filename_in)
+using namespace std;
+
+Image::Image()
 {
-    // 画像を読み込み、imgに保存する。グレースケール化した画像をgray_imgに保存する。
-    std::cout << "Open::" << filename_in << std::endl;
-    filename = filename_in;
-    img = cv::imread(filename_in);
-    cvtColor(img, gray_img, CV_RGB2GRAY);
-    if(img.empty())
-        exit(1);
-    post_img = gray_img.clone();
+}
+
+Image::Image(Image *img)
+{
+    
 }
 
 Image::~Image()
@@ -23,9 +23,44 @@ Image::~Image()
     
 }
 
+void Image::open(char *filename_in)
+{
+    // 画像を読み込み、imgに保存する。グレースケール化した画像をgray_imgに保存する。
+    /*
+    std::cout << "Open::" << filename_in << std::endl;
+    filename = filename_in;
+    img = cv::imread(filename_in);
+    cvtColor(img, gray_img, CV_RGB2GRAY);
+    if(img.empty())
+        exit(1);
+    post_img = gray_img.clone();
+    */
+}
+
+void Image::set_info(char *ifile, string ctype, int copt, string cmessage, string comessage)
+{
+    inputfile = ifile;
+    caltype = ctype;
+    calopt = copt;
+    cal_message = cmessage;
+    calopt_message = comessage;
+}
+
+
+void Image::show_info()
+{
+    cout << "==== Information ====" << endl;
+    cout << "inputfile: " << inputfile << endl;
+    if(!outputfile.empty())
+        cout << "outputfile: " << outputfile << endl;        
+    cout << "calculation type: " << cal_message << endl;
+    cout << "calculation option: " << calopt_message << endl;
+    cout << "==== +++++++++++ ====" << endl;    
+}
 void Image::show(unsigned char f)
 {
     // img に保存されている画像をウィンドウに表示する。
+    /*
     if( f == BEFORE){
         cv::namedWindow(filename, cv::WINDOW_AUTOSIZE);
         cv::imshow(filename, gray_img);
@@ -39,6 +74,7 @@ void Image::show(unsigned char f)
         cv::imshow(filename, gray_img);
         cv::waitKey(0);
     }
+    */
 }
 
 void Image::extract_contour(int f)

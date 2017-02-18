@@ -1,8 +1,8 @@
 #include <random>
 #include <vector>
 
-#include "coreRemoveNoise.hpp"
-#include "coreExtractContour.hpp"
+#include "remove_noise.hpp"
+#include "extract_contour.hpp"
 
 #define RAND_MAX 32767
 
