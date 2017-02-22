@@ -4,8 +4,6 @@
 #include "remove_noise.hpp"
 #include "extract_contour.hpp"
 
-#define RAND_MAX 32767
-
 
 /* ********************
    移動平均法による雑音除去
@@ -167,12 +165,50 @@ void noise_spike(cv::Mat in_img, cv::Mat out_img, int number, int level)
     }
 }
 
+/******
+   エッジ保存平滑化
+   in_img  : 入力画像配列
+   out_img : 出力画像配列
+ ******/
 void smooth_edge_preserve(cv::Mat in_img, cv::Mat out_img)
 {
+	unsigned char p[9][9];
+	int patx[9][9] = { 0, -1,  0,  1, -1,  0,  1,  0,  0,
+					   0,  1,  2,  0,  1,  2,  1,  0,  0,
+					   0,  1,  2,  1,  2,  1,  2,  0,  0,
+					   0,  1,  0,  1,  2,  1,  2,  0,  0,
+					   0, -1,  0,  1, -1,  0,  1,  0,  0,
+					   0, -1, -2, -1,  0, -2, -1,  0,  0,
+					   0, -2, -1, -2, -1, -2, -1,  0,  0,
+					   0, -2, -1, -2, -1,  0, -1,  0,  0,
+					  -1,  0,  1, -1,  0,  1, -1,  0,  1};
+	int paty[9][9] = { 0, -2, -2, -2, -1, -1, -1,  0,  0,
+					   0, -2, -2, -1, -1, -1,  0,  0,  0,
+					   0, -1, -1,  0,  0,  1,  1,  0,  0,
+					   0,  0,  1,  1,  1,  2,  2,  0,  0,
+					   0,  1,  1,  1,  2,  2,  2,  0,  0,
+					   0,  0,  1,  1,  1,  2,  2,  0,  0,
+					   0, -1, -1,  0,  0,  1,  1,  0,  0,
+					   0, -2, -2, -1, -1, -1,  0,  0,  0,
+					  -1, -1, -1,  0,  0,  0,  1,  1,  1}; 
+
+    out_img = in_img.close();
+
+	for (int i = 2; i < in_img.size().height-2; i++) {
+		for (int j = 2; j < in_img.size().width-2; j++) {
+			for (int k = 0; k < 9; k++) {
+				for (int m = 0; m < 9; m++) {
+					p[k][m] = in_img.at<uchar>[i+paty[k][m]][j+patx[k][m]];
+				}
+			}
+			image_out.at<uchar>(i, j) = average_minvar(p);
+		}
+	}
 }
     
 void average_minvar(unsigned char p[9][9])
 {
+    
 }
 
 

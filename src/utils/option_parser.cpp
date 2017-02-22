@@ -35,7 +35,7 @@ int option_parser(int argc, char** argv, Image* img){
         cout << "while" << endl;
         switch(opt){
         case 'o' :
-            printf("%s\n",optarg);o
+            printf("%s\n",optarg);
             break;
         case 'c' :
             ctype = 'c';

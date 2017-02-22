@@ -123,13 +123,23 @@ void Image::remove_noise(int f)
     switch(f){
     case 1:
         std::cout << "Moving_Average_Methods." << std::endl;
-        //smooth(gray_img, post_img, 7);
-        noise_rand(gray_img, post_img, 50);
+        smooth(gray_img, post_img, 7);
         break;
     case 2:
-        std::cout << "median_Filter." << std::endl;
-        //smooth(gray_img, post_img, 7);
+        std::cout << "Add_Nosie." << std::endl;
+        noise_rand(gray_img, post_img, 50);
+        break;
+    case 3:
+        std::cout << "Smooth_Weighted." << std::endl;
+        smooth_weighted(gray_img, post_img, 1);
+        break;
+    case 4:
+        std::cout << "Median_Filter." << std::endl;
         median(gray_img, post_img);
+        break;
+    case 5:
+        std::cout << "Add_Spike_Noise." << std::endl;
+        noise_spike(gray_img, post_img, 50);
         break;
 
         
