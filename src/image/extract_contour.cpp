@@ -4,15 +4,12 @@
  */
 #include "image_const.hpp"
 #include "extract_contour.hpp"
-
+#include "image_const.hpp"
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <numeric>
 #include <cstdlib>
 #include <cmath>
-
-#define PI 3.141592
-#define DMAX 1000
 
 
 /* *****************************

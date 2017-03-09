@@ -30,6 +30,7 @@ private:
     cv::Mat tmp_img;
     void extract_contour(int f);
     void remove_noise(int f);
+    void sharpening(int f);
 
 public:
     Image();

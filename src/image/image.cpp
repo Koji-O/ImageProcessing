@@ -46,6 +46,11 @@ void Image::set_info(char *ifile, string ctype, int copt, string cmessage, strin
     calopt_message = comessage;
 }
 
+void Image::start()
+{
+    
+
+}
 
 void Image::show_info()
 {
@@ -139,10 +144,10 @@ void Image::remove_noise(int f)
         break;
     case 5:
         std::cout << "Add_Spike_Noise." << std::endl;
-        noise_spike(gray_img, post_img, 50);
+        noise_spike(gray_img, post_img, 50, 50);
+    case 6:
+        std::cout << "LOF fileter." << std::endl;
         break;
-
-        
     default:
         break;
     }

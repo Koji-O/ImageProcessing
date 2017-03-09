@@ -8,4 +8,6 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(OpenCV REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Boost 1.59 COMPONENTS  program_options REQUIRED)
+
 add_subdirectory(src)

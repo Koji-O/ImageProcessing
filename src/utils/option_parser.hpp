@@ -3,7 +3,5 @@
 #include "../image/image.hpp"
 
 int option_parser(int argc, char** argv, Image* img);
-void short_help(void);
-void long_help(void);
 
 #endif

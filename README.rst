@@ -21,7 +21,8 @@ C言語で学ぶ実践画像処理
 
 1. Opencv version >= 2.0
 2. Cmake version >= 2.8
-3. Qt5
+3. boost >= 1.61   
+4. Qt5
 
 linux環境、mac環境ではビルドが実行できることを確認しています。
 

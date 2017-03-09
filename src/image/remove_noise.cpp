@@ -1,9 +1,8 @@
 #include <random>
 #include <vector>
-
+#include "image_const.hpp"
 #include "remove_noise.hpp"
 #include "extract_contour.hpp"
-
 
 /* ********************
    移動平均法による雑音除去
@@ -173,61 +172,179 @@ void noise_spike(cv::Mat in_img, cv::Mat out_img, int number, int level)
 void smooth_edge_preserve(cv::Mat in_img, cv::Mat out_img)
 {
 	unsigned char p[9][9];
-	int patx[9][9] = { 0, -1,  0,  1, -1,  0,  1,  0,  0,
-					   0,  1,  2,  0,  1,  2,  1,  0,  0,
-					   0,  1,  2,  1,  2,  1,  2,  0,  0,
-					   0,  1,  0,  1,  2,  1,  2,  0,  0,
-					   0, -1,  0,  1, -1,  0,  1,  0,  0,
-					   0, -1, -2, -1,  0, -2, -1,  0,  0,
-					   0, -2, -1, -2, -1, -2, -1,  0,  0,
-					   0, -2, -1, -2, -1,  0, -1,  0,  0,
-					  -1,  0,  1, -1,  0,  1, -1,  0,  1};
-	int paty[9][9] = { 0, -2, -2, -2, -1, -1, -1,  0,  0,
-					   0, -2, -2, -1, -1, -1,  0,  0,  0,
-					   0, -1, -1,  0,  0,  1,  1,  0,  0,
-					   0,  0,  1,  1,  1,  2,  2,  0,  0,
-					   0,  1,  1,  1,  2,  2,  2,  0,  0,
-					   0,  0,  1,  1,  1,  2,  2,  0,  0,
-					   0, -1, -1,  0,  0,  1,  1,  0,  0,
-					   0, -2, -2, -1, -1, -1,  0,  0,  0,
-					  -1, -1, -1,  0,  0,  0,  1,  1,  1}; 
+	int patx[9][9] = {{0, -1,  0,  1, -1,  0,  1,  0,  0},
+                      {0,  1,  2,  0,  1,  2,  1,  0,  0},
+					  {0,  1,  2,  1,  2,  1,  2,  0,  0},
+                      {0,  1,  0,  1,  2,  1,  2,  0,  0},
+                      {0, -1,  0,  1, -1,  0,  1,  0,  0},
+                      {0, -1, -2, -1,  0, -2, -1,  0,  0},
+                      {0, -2, -1, -2, -1, -2, -1,  0,  0},
+                      {0, -2, -1, -2, -1,  0, -1,  0,  0},
+                      {-1,  0,  1, -1,  0,  1, -1,  0,  1}};
+	int paty[9][9] = {{ 0, -2, -2, -2, -1, -1, -1,  0,  0},
+                      { 0, -2, -2, -1, -1, -1,  0,  0,  0},
+                      { 0, -1, -1,  0,  0,  1,  1,  0,  0},
+					  { 0,  0,  1,  1,  1,  2,  2,  0,  0},
+                      { 0,  1,  1,  1,  2,  2,  2,  0,  0},
+                      { 0,  0,  1,  1,  1,  2,  2,  0,  0},
+					  { 0, -1, -1,  0,  0,  1,  1,  0,  0},
+                      { 0, -2, -2, -1, -1, -1,  0,  0,  0},
+					  {-1, -1, -1,  0,  0,  0,  1,  1,  1}}; 
 
-    out_img = in_img.close();
+    out_img = in_img.clone();
 
 	for (int i = 2; i < in_img.size().height-2; i++) {
 		for (int j = 2; j < in_img.size().width-2; j++) {
 			for (int k = 0; k < 9; k++) {
 				for (int m = 0; m < 9; m++) {
-					p[k][m] = in_img.at<uchar>[i+paty[k][m]][j+patx[k][m]];
+					p[k][m] = in_img.at<uchar>(i+paty[k][m], j+patx[k][m]);
 				}
 			}
-			image_out.at<uchar>(i, j) = average_minvar(p);
+			out_img.at<uchar>(i, j) = average_minvar(p);
+		}
+	}
+}
+
+/* *****************************
+   分散が最小となる画素配列の平均値を返す
+   p: 入力画素配列
+   ***************************** */
+unsigned char average_minvar(unsigned char p[9][9])
+{
+    int n;
+    int k = 0;
+    double ave[9], var[9], dmin;
+
+	for (int k = 0; k < 8; k++) {
+		ave[k] = 0.0;
+		for (int i = 0; i < 7; i++) ave[k] += (double)p[k][i];
+		ave[k] = ave[k] / 7.0;
+		var[k] = 0.0;
+		for(int i = 0; i < 7; i++)
+			var[k] += ((double)p[k][i] - ave[k]) * ((double)p[k][i] - ave[k]);
+		var[k] = var[k] / 7.0;
+	}
+	ave[8] = 0.0;
+	for (int i = 0; i < 9; i++) ave[k] += (double)p[k][i];
+	ave[8] = ave[k] / 9.0;
+	var[8] = 0.0;
+	for (int i = 0; i < 9; i++)
+		var[k] += ((double)p[k][i] - ave[k]) * ((double)p[k][i] - ave[k]);
+	var[k] = var[k] / 9.0;
+	dmin = var[0];
+	n = 0;
+	for (int k = 1; k < 9; k++) {
+		if (dmin > var[k]) {
+			dmin = var[k];
+			n = k;
+		}
+	}
+	return (unsigned char)ave[n];        
+}
+
+/* *****************************
+   LOGのゼロ交差判定による輪郭の抽出
+   in_img  ::  入力画像配列 
+   out_img ::  出力画像配列
+   var     ::  分散
+   ***************************** */
+void log_zero_cross(cv::Mat in_img, cv::Mat out_img, double var)
+{
+    cv::Mat buf_img;
+    buf_img = in_img.clone();
+
+	laplacian_of_gaussian(in_img, buf_img, var, 1.0);
+	zero_cross(buf_img, out_img);
+}
+
+/* *****************************
+   LOGフィルタ
+   in_img  ::  入力画像配列 
+   out_img ::  出力画像配列
+   var     ::  分散
+   amp     ::  スケール
+   ***************************** */
+void laplacian_of_gaussian(cv::Mat in_img, cv::Mat out_img, double var, double amp)
+{
+    double c[TAP*2+1][TAP*2+1];
+    int xsize = in_img.size().width, ysize = in_img.size().height;
+	int	k, x, y;
+	double r2, v2, v4, d;
+
+    
+	k = (int)(3 * SQRT2 * var);
+	if (k > TAP) k = TAP;
+	v2 = var * var;
+	v4 = 1 / (v2 * v2 * PI);
+	for(int m = -k; m <= k; m++){
+		for(int n = -k; n <= k; n++){
+			r2 = (m*m + n*n) / v2 / 2;
+			c[TAP+m][TAP+n] = v4 * (r2 - 1) * exp(-r2);
+		}
+	}
+
+	for(int i = 0; i < ysize; i++){
+		for(int j = 0; j < xsize; j++){
+			d = OFFSET;
+			for(int m = -k; m <= k; m++){
+				for(int n = -k; n <= k; n++){
+					y = i + m;
+					x = j + n;
+					if (y < 0) y = 0;
+					if (x < 0) y = 0;
+					if (y > ysize-1) y = ysize-1;
+					if (x > xsize-1) x = xsize-1;
+					d += c[TAP+m][TAP+n] * in_img.at<uchar>(y, x);
+				}
+			}
+			if (d <   0) d =   0;
+			if (d > 255) d = 255;
+			out_img.at<uchar>(i, j) = (unsigned char)d;
 		}
 	}
 }
     
-void average_minvar(unsigned char p[9][9])
-{
-    
-}
-
-
-void log_zero_cross(cv::Mat in_img, cv::Mat out_img, double var)
-{
-}
-
-
-void laplacian_of_gaussian(cv::Mat in_img, cv::Mat out_img, double var, double amp)
-{
-}
-    
-
+/* *****************************
+   膨張処理
+   in_img  ::  入力画像配列 
+   out_img ::  出力画像配列
+   ***************************** */
 void dilation(cv::Mat in_img, cv::Mat out_img)
 {
+    out_img = in_img.clone();
+	for(int i = 1; i < in_img.size().height-1; i++){
+		for(int j = 1; j < in_img.size().width-1; j++){
+			if(in_img.at<uchar>(i-1, j-1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i-1, j  ) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i-1, j+1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i  , j-1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i  , j+1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i+1, j-1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i+1, j  ) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+			if(in_img.at<uchar>(i+1, j+1) == HIGH) out_img.at<uchar>(i, j) = HIGH;
+        }
+	}
 }
 
-
+/* *****************************
+   収縮処理
+   in_img  ::  入力画像配列 
+   out_img ::  出力画像配列
+   ***************************** */
 void erosion(cv::Mat in_img, cv::Mat out_img)
 {
+    out_img = in_img.clone();
+	for(int i = 1; i < in_img.size().height-1; i++){
+		for(int j = 1; j < in_img.size().width-1; j++){
+			if(in_img.at<uchar>(i-1, j-1) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i-1, j  ) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i-1, j+1) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i  , j-1) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i  , j+1) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i+1, j-1) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i+1, j  ) == LOW) out_img.at<uchar>(i, j) = LOW;
+			if(in_img.at<uchar>(i+1, j+1) == LOW) out_img.at<uchar>(i, j) = LOW;
+        }
+	}    
 }
 
